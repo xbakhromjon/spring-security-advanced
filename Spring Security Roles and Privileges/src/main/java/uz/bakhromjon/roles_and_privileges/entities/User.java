@@ -3,6 +3,7 @@ package uz.bakhromjon.roles_and_privileges.entities;
 import jakarta.persistence.*;
 
 import java.util.Collection;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,7 +15,8 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "users")
+@Entity
+@Table(name = "users")
 public class User {
 
     @Id
@@ -25,19 +27,17 @@ public class User {
     private String lastName;
     private String email;
     private String password;
-    private boolean enabled;
-    private boolean tokenExpired;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_roles",
             joinColumns = @JoinColumn(
                     name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(
                     name = "role_id", referencedColumnName = "id"))
-    private Collection<Role> roles;
+    private List<Role> roles;
 
-    public User(Long id, String email, String password, Collection<Role> roles) {
+    public User(Long id, String email, String password, List<Role> roles) {
         this.id = id;
         this.email = email;
         this.password = password;

@@ -27,6 +27,11 @@ public class AuthController {
     }
 
 
+    @PostMapping("/signout")
+    public ResponseEntity<?> logoutUser() {
+        return service.logoutUser();
+    }
+
 }
 
 

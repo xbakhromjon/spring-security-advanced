@@ -16,7 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import uz.bakhromjon.roles_and_privileges.auth.AuthTokenFilter;
-import uz.bakhromjon.roles_and_privileges.auth.UserDetailsServiceImpl;
+import uz.bakhromjon.roles_and_privileges.auth.userDetails.UserDetailsServiceImpl;
 
 /**
  * @author : Bakhromjon Khasanboyev
@@ -31,9 +31,15 @@ import uz.bakhromjon.roles_and_privileges.auth.UserDetailsServiceImpl;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final String[] WHITE_LIST = {"/auth/signin",
+    private final String[] WHITE_LIST = {
+            "/auth/signin",
             "/auth/signout",
-            "/auth/signup", "/swagger-ui/**", "/v3/api-docs/**"};
+            "/test/anonymous",
+            "/test/user",
+            "/test/moderator",
+            "/swagger-ui/**",
+            "/v3/api-docs/**"
+    };
 
 
     private final UserDetailsServiceImpl userDetailsService;

@@ -1,31 +1,20 @@
-package uz.bakhromjon.roles_and_privileges.auth;
+package uz.bakhromjon.roles_and_privileges.auth.userDetails;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import uz.bakhromjon.roles_and_privileges.entities.Privilege;
-import uz.bakhromjon.roles_and_privileges.entities.Role;
-import uz.bakhromjon.roles_and_privileges.entities.User;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
-
-/**
- * @author : Bakhromjon Khasanboyev
- * @since : 31/10/22, Mon, 21:46
- **/
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import uz.bakhromjon.roles_and_privileges.auth.roleDetails.RoleDetails;
+import uz.bakhromjon.roles_and_privileges.enums.EPrivilege;
+
+import java.util.*;
 
 
 @Setter
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor
 public class UserDetailsImpl implements UserDetails, Authentication {
     private static final long serialVersionUID = 1L;
@@ -36,19 +25,22 @@ public class UserDetailsImpl implements UserDetails, Authentication {
 
     private String password;
 
-    private Collection<? extends GrantedAuthority> authorities;
+    private List<RoleDetails> roles;
 
-    public UserDetailsImpl(Long id, String password,
-                           Collection<? extends GrantedAuthority> authorities) {
+    public UserDetailsImpl(Long id, String email, String password,
+                           List<RoleDetails> roles) {
         this.id = id;
+        this.email = email;
         this.password = password;
-        this.authorities = authorities;
+        this.roles = roles;
     }
 
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
+        Set<EPrivilege> privileges = new HashSet<>();
+        roles.forEach(role -> privileges.addAll(role.getPrivileges()));
+        return privileges;
     }
 
     @Override
@@ -121,4 +113,5 @@ public class UserDetailsImpl implements UserDetails, Authentication {
     public String getName() {
         return null;
     }
+
 }

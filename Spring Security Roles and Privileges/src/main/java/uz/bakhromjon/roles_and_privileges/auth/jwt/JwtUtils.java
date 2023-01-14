@@ -1,4 +1,4 @@
-package uz.bakhromjon.roles_and_privileges.auth;
+package uz.bakhromjon.roles_and_privileges.auth.jwt;
 
 import io.jsonwebtoken.*;
 import jakarta.servlet.http.Cookie;
@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.WebUtils;
+import uz.bakhromjon.roles_and_privileges.auth.userDetails.UserDetailsImpl;
 
 import java.util.Date;
 
@@ -40,7 +41,7 @@ public class JwtUtils {
 
     public ResponseCookie generateJwtCookie(UserDetailsImpl userPrincipal) {
         String jwt = generateTokenFromUsername(userPrincipal.getUsername());
-        return ResponseCookie.from(jwtCookie, jwt).path("/api").maxAge(30 * 60 * 60).httpOnly(true).build();
+        return ResponseCookie.from(jwtCookie, jwt).path("/").maxAge(30 * 60 * 60).httpOnly(true).build();
     }
 
     public ResponseCookie getCleanJwtCookie() {

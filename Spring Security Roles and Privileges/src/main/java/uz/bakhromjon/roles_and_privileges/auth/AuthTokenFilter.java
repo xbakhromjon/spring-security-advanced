@@ -12,6 +12,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
+import uz.bakhromjon.roles_and_privileges.auth.jwt.JwtUtils;
+import uz.bakhromjon.roles_and_privileges.auth.userDetails.UserDetailsServiceImpl;
 
 import java.io.IOException;
 
@@ -38,10 +40,12 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(userDetails,
-                                null,
+                                userDetails.getPassword(),
                                 userDetails.getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
+
+                Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             }
         } catch (Exception e) {
             logger.error("Cannot set user authentication: {0}", e);

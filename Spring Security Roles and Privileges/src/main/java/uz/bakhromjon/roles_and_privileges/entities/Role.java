@@ -1,14 +1,16 @@
 package uz.bakhromjon.roles_and_privileges.entities;
 
 import jakarta.persistence.*;
-import uz.bakhromjon.roles_and_privileges.enums.ERole;
-
-import java.util.Collection;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import uz.bakhromjon.roles_and_privileges.enums.EPrivilege;
+import uz.bakhromjon.roles_and_privileges.enums.ERole;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 
 @Setter
@@ -27,19 +29,17 @@ public class Role {
     @ManyToMany(mappedBy = "roles")
     private Collection<User> users;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "roles_privileges",
-            joinColumns = @JoinColumn(
-                    name = "role_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(
-                    name = "privilege_id", referencedColumnName = "id"))
-    private Collection<Privilege> privileges;
+    @ElementCollection(targetClass = EPrivilege.class)
+    @CollectionTable(name = "role_permission", joinColumns = @JoinColumn(name = "role_id"))
+    @Column(name = "permissions", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Set<EPrivilege> privileges;
 
 
-    public Role(Long id, ERole name, Collection<Privilege> privileges) {
+    public Role(Long id, ERole name, Set<EPrivilege> privileges) {
         this.id = id;
         this.name = name;
         this.privileges = privileges;
     }
 }
+

@@ -1,4 +1,4 @@
-package uz.bakhromjon.roles_and_privileges.auth;
+package uz.bakhromjon.roles_and_privileges.auth.response;
 
 import uz.bakhromjon.roles_and_privileges.entities.Role;
 
